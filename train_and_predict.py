@@ -13,7 +13,7 @@ import data
 """ Train the model et make predictions on the testing set """
 
 
-def training_and_testing_model(X, y, X_test, id_line):
+def training_and_testing_model(X, y, X_test, id_line, epoch, batch_size):
     model = Sequential()
     # Adds a densely-connected layer with 64 units to the model:
     model.add(Conv2D(64, (3, 3), activation='relu', input_shape=X.shape[1:]))
@@ -31,7 +31,7 @@ def training_and_testing_model(X, y, X_test, id_line):
                   loss='binary_crossentropy',
                   metrics=['accuracy'])
 
-    model.fit(X, y, epochs=6, batch_size=32, validation_split=0.2)
+    model.fit(X, y, epochs=epoch, batch_size=batch_size, validation_split=0.2)
 
 
     predictions = model.predict(X_test)
@@ -58,10 +58,12 @@ def training_and_testing_model(X, y, X_test, id_line):
 
 
 def main():
+    epoch = 6
+    batch_size = 32
     train_dir = './dataset/training_set/all/'
     test_dir = './dataset/test_set/all/'
 
     X_test, id_line = data.create_test_data(test_dir)
     X, y, X_dogs, X_cats = data.create_training_data(train_dir)
-    training_and_testing_model(X, y, X_test, id_line)
+    training_and_testing_model(X, y, X_test, id_line, epoch, batch_size)
 
