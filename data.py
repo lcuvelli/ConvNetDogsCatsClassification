@@ -31,6 +31,8 @@ def plot_images(n,folder):
     plt.show()
 
 
+""" Loading training set data 
+    path = './dataset/training_set/all/' """
 def create_training_data(path):
     convert = lambda category: int(category == 'dog')
     i = 0
@@ -66,6 +68,28 @@ def create_training_data(path):
     return [X, y, X_dogs, X_cats]
 
 
+""" Loading test dataset
+    path = './dataset/test_set/all/' 
+"""
+def create_test_data(path):
+    X_test = []
+    id_line = []
+    i = 0
+    for p in os.listdir(path):
+        if(i%100 == 0):
+          print(i)
+        id_line.append(p.split(".")[0])
+        img_array = cv2.imread(os.path.join(path,p),cv2.IMREAD_GRAYSCALE)
+        new_img_array = cv2.resize(img_array, dsize=(80, 80))
+        X_test.append(new_img_array)
+        i += 1
+
+    # Resize
+    X_test = np.array(X_test).reshape(-1, 80, 80, 1)
+    # Normalize
+    X_test = X_test / 255
+
+    return [X_test, id_line]
 
 
 def main():
@@ -78,6 +102,5 @@ def main():
     X, y, X_dogs, X_cats  = create_training_data(path)  # array of pixels
 
 
-main()
 
 
